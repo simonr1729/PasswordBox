@@ -1,0 +1,22 @@
+// ----------------- set version number and define size of box ---------
+VERSION 14.0
+POSITION . . 290 200
+// ------------------------------------------- define a dialog ---------
+DIALOG main, label("SurveyCTO login")
+BEGIN
+TEXT tx_var 10 10 270 ., label("Username:")
+EDIT vl_var @ +20 @ ., label("username") default(global username)
+TEXT tx_var2 @ +20 @ ., label("Password:")
+EDIT vl_var2 @ +20 @ ., password
+END
+// -------------------- define the u-action and helper buttons ---------
+OK ok1, label("OK")
+CANCEL can1, label("Cancel")
+// --------------------------- define how to assemble u-action ---------
+PROGRAM command
+BEGIN
+put `"!curl "https://`server'.surveycto.com/api/v1/forms/data/wide/csv/`formid'" "'
+put `" --output "`csv'" --digest -u "' main.vl_var
+put ":" main.vl_var2
+stata hidden
+END
